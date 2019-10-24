@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<style>
+    #frm {
+        height: 120px;
+        border: 1px solid gray;
+        width: 800px;
+        background-color: lightblue;
+    }
+</style>
+
+<fieldset class="purple-square-container" id="frm">
+    <input class="effect-1" type="text" id="newProduct" placeholder="Tên Sản Phẩm ">
+    <input class="effect-1" type="text" id="imgProduct" placeholder="Link của Ảnh ">
+    <p id="tmkl"></p>
+    <input class="button button1" type="button" id="addProduct" value="Thêm" onclick="pro.addProduct()"><br><br>
+</fieldset>
+<h3> product </h3>
+<table class="purple-square" border="1" width="1000" cellspacing="0" cellpadding="3" id="result0">
+
+</table>
+<script>
+
+    let AppProducts = function () {
+        this.listProducts = [
+            ["truyện:Hoá ra anh vẫn ở đây" +'\n' +"<br>"+"Tác giả :Tần Di Ô " + '\n'+"<br>" +
+             "Mô tả:Khi nếm trải cảnh phúc bất hạnh mới biết được hạnh phúc quý giá thế nào...\n" +
+            "\n" +
+            "Ông trời cho họ gần nhau nơi chân trời góc bể, tưởng như không thể tìm thấy nhau, <br>rồi lại bắt họ xa nhau đằng đẵng 4 năm trời, có lẽ, tình của họ còn chưa đủ nặng...\n"+
+
+                "<br>"+"thể loại : ngôn tình ,đô thi" +'\n',img="top-10-tieu-thuyet-ngon-tinh-trung-quoc-hay-nhat-moi-thoi-dai-2 copy.jpg"],
+            ["Truyện:Bến xe " +'\n' +"<br>"+"Tác giả:Thương Thái Vi " + '\n '+"<br>"+
+                "thể loại:ngôn tinh,ngược" +'\n'+"<br>"+
+                "Mô tả:Vận mệnh mỗi con người chính là đều tuân theo quy luật: sinh, lão, bệnh, tử. Trong khoảng thời gian đó, chúng ta gặp biết bao nhiêu người," +
+            " lại đi qua biết bao nhiều người, và con tim chúng ta lại đỗ bến ở một người"+'\n', img="images.jpeg"],
+            ["Truyện:Mãi mãi là bao xa" +'\n' + "<br>" +"tác giả:Diệp Lạc Vô Tâm "+'\n'+"<br>" +
+                "Thể loại:ngôn tinh " +'\n' +"<br>"+
+                "Mô tả:Câu chuyện xoay quanh nhân vật chính là Bạch Lăng Lăng – cô sinh viên trường đại học T hết sức xinh đẹp và đáng yêu, " +
+            "là đối tượng thầm thương trộm nhớ của biết bao nam sinh trong trường." +
+            " Thế nhưng cô lại không hề để tâm đến họ, chỉ dành tình cảm duy nhất cho “Vĩnh viễn có xa không” – một nhà khoa học gia," +
+            " một người bạn ảo cô quen qua mạng, người mà cô sùng bái cả về trí tuệ và tâm hồn nhạy cảm, người duy nhất trên đời thấu hiểu cô.\n" +
+            "\n",img="64602683_3129177553760884_8699755342390624256_n_da9c0703c01c46d5bea4eed0616687ba_master.png"],
+            ["Truyện:Dạo tình" +'\n'+"<br>"+"Tác giả:Chu Ngọc" +'\n' +"<br>"+
+                "Thể loại:ngôn tình ,đô thị" +'\n' +"<br>"+
+                "Mô tả:Đây là tác phẩm hắc bang, bối cảnh hoành tráng, tình tiết đẫm máu u ám. Nếu bạn muốn xem câu truyện tình lãng mạn thì đừng nhảy vào hố này." +
+            " \"Đạo tình\" là một thế giới đen tối, trong đó nam chính tuyệt đối không phải là người tốt" +'\n', img="yeuaudio.com_dao-tinh.jpg"],
+
+
+        ];
+        this.set = function () {
+            sessionStorage.listProducts = JSON.stringify(this.listProducts);
+        };
+
+        this.get = function () {
+            this.listProducts = JSON.parse(sessionStorage.listProducts);
+        };
+
+
+        this.display = function () {
+            this.get();
+            let table = '';
+            for (let i = 0; i < this.listProducts.length; i++) {
+                table = table + '<tr>';
+                table = table + '<td style="width: 50px; text-align: center"><p>' + (i + 1) + '</p></td>';
+                table = table + '<td style="width: 1200px"><p id="' + i + '">&nbsp;&nbsp;' + this.listProducts[i][0] + '</p></td>';
+                table = table + '<td><img src="' + this.listProducts[i][1] + '" width="300" height="300" ></td>';
+                table = table + '<td style="width: 80px; text-align: center"><input type="button" class="button" value="Sửa" onclick="editProduct(' + i + ')"></input></td>';
+                table = table + '<td style="width: 80px; text-align: center"><input type="button" class="button" value="Xóa" onclick="deleteProduct(' + i + ')"></input></td>';
+                table = table + '</tr>';
+            }
+
+            document.getElementById("result0").innerHTML = table;
+        };
+
+
+
+        this.addProduct = function () {
+            let product = document.getElementById("newProduct").value;
+            let imgs = document.getElementById("imgProduct").value;
+            if (product === "") {
+                document.getElementById("tmkl").innerHTML = "Vui Lòng tên";
+            } else if (imgs === "") {
+                document.getElementById("tmkl").innerHTML = "Vui Lòng Nhập Đường Dẫn";
+            } else {
+                this.listProducts.push([product, imgs]);
+                document.getElementById("tmkl").innerHTML = "đã thêm sản phẩm  !";
+                this.set();
+                return this.display();
+
+            }
+        };
+
+        this.editProductImg = function (i) {
+            let link = prompt("Nhập Link Ảnh Muốn Sửa ");
+            if (link.trim() === "") {
+                alert("Vui Lòng Nhập Link Ảnh Muốn Sửa");
+                return;
+            }
+            this.listProducts[i][1] = link;
+            this.set();
+            return this.display();
+        };
+
+        this.editProduct = function (i) {
+            let temp = prompt("Nhâp Tên Bạn Muốn Sửa ");
+            if (temp.trim() === "") {
+                alert("Vui Lòng Nhâp Tên Bạn Muốn Sửa");
+                return;
+            }
+            this.listProducts[i][0] = temp;
+            this.set();
+            return this.display();
+
+        };
+
+
+        this.deleteProduct = function (i) {
+            let confirmAnswer = confirm("Bạn Có Muốn Xóa " + this.listProducts[i][0] + " ?");
+            if (confirmAnswer) {
+                let arr1 = [];
+                let x = 0;
+                while (x < this.listProducts.length) {
+                    if (x == i) {
+                        x++;
+                        continue;
+                    } else {
+                        arr1.push(this.listProducts[x]);
+                        x++;
+                    }
+                }
+                this.listProducts = arr1;
+                this.set();
+                return this.display();
+            } else {
+                return;
+            }
+
+
+        };
+
+
+    };
+    let pro = new AppProducts();
+
+    function editProduct(i) {
+        return pro.editProduct(i);
+    }
+
+    function editProductImg(i) {
+        return pro.editProductImg(i);
+    }
+
+    function deleteProduct(i) {
+        return pro.deleteProduct(i);
+    }
+
+</script>
+</body>
+</html>
